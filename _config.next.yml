@@ -12,7 +12,7 @@ custom_file_path:
 
 # Scheme & dark mode
 scheme: Gemini
-darkmode: true
+darkmode: false # dark mode handled by darkmode-js toggle (class-based)
 
 # Menu
 menu:
@@ -55,6 +55,7 @@ busuanzi_count:
 # Dark mode toggle button (hexo-next-darkmode plugin)
 darkmode_js:
   enable: true
+  libUrl: /js/darkmode-js.min.js # vendored locally (jsdelivr unstable in CN)
 # Local search (search.json via hexo-generator-searchdb)
 local_search:
   enable: true

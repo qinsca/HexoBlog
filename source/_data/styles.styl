@@ -32,18 +32,18 @@
 
 /* ====== 🌙 夜间模式 (重点修复层次感) ====== */
 /* 1. 系统设置 */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ak-bg: #0A0A0A;             /* L1: 背景极深 (接近纯黑) */
-    --ak-sidebar-bg: #161616;     /* L2: 侧边栏 (深灰) */
-    --ak-card-bg: #202020;        /* L3: 文章卡片 (提亮灰，形成对比) */
-    --ak-decorat: #23ADE5;
-    --ak-text-main: #FFFFFF;
-    --ak-text-sec: #A0A0A0;
-    --ak-border-color: #333333;
-    --ak-shadow: 0 10px 30px rgba(0,0,0,0.8); /* 夜间强投影，拉开层次 */
-  }
-}
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     --ak-bg: #0A0A0A;             /* L1: 背景极深 (接近纯黑) */
+//     --ak-sidebar-bg: #161616;     /* L2: 侧边栏 (深灰) */
+//     --ak-card-bg: #202020;        /* L3: 文章卡片 (提亮灰，形成对比) */
+//     --ak-decorat: #23ADE5;
+//     --ak-text-main: #FFFFFF;
+//     --ak-text-sec: #A0A0A0;
+//     --ak-border-color: #333333;
+//     --ak-shadow: 0 10px 30px rgba(0,0,0,0.8); /* 夜间强投影，拉开层次 */
+//   }
+// }
 
 /* 2. 手动开关 */
 body.dark-mode, body.darkmode--activated, html[data-theme='dark'] {
@@ -230,10 +230,10 @@ body {
   background: #F9F9F9;
   border: 1px solid var(--ak-border-color);
 }
-@media (prefers-color-scheme: dark) {
-  .highlight { background: #000 !important; border-left: 4px solid var(--ak-yellow); }
-  .highlight figcaption { background: #111; color: #ccc; }
-}
+// @media (prefers-color-scheme: dark) {
+//   .highlight { background: #000 !important; border-left: 4px solid var(--ak-yellow); }
+//   .highlight figcaption { background: #111; color: #ccc; }
+// }
 body.dark-mode .highlight, html[data-theme='dark'] .highlight {
   background: #000 !important;
   border-left: 4px solid var(--ak-yellow);
