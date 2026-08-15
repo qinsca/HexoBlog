@@ -1,0 +1,109 @@
+<!-- 罗德岛背景大水印 -->
+<div id="arknights-bg-watermark" style="
+    position: fixed;
+    bottom: -50px;
+    right: -50px;
+    font-family: 'Oxanium', sans-serif;
+    font-weight: 900;
+    font-size: 15vh;
+    color: rgba(255, 255, 255, 0.02);
+    transform: rotate(-15deg);
+    pointer-events: none;
+    z-index: -1;
+    white-space: nowrap;
+    user-select: none;
+">
+    QSC
+</div>
+
+<!-- 左下角装饰线 -->
+<div style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 200px;
+    height: 10px;
+    background: repeating-linear-gradient(
+      -45deg,
+      #333,
+      #333 2px,
+      transparent 2px,
+      transparent 4px
+    );
+    z-index: -1;
+    pointer-events: none;
+"></div>
+<div style="
+    position: fixed;
+    bottom: 35px;
+    left: 20px;
+    font-family: 'Oxanium';
+    font-size: 10px;
+    color: #555;
+    z-index: -1;
+">
+    SYSTEM: ONLINE // STABLE
+</div>
+<script>
+(function() {
+  // === 罗德岛终端 LOG 编号计算系统 V2.0 ===
+  
+  // 1. 定义基础参数 (这些是 Hexo 静态生成的，不会变)
+  var TOTAL_POSTS = {{ site.posts.length }};
+  var PER_PAGE = {{ config.per_page }} || 10;
+  
+  // 2. 核心函数：计算并注入编号
+  function updateArknightsLogs() {
+    console.log('[Arknights] Start injecting LOG numbers...');
+    
+    // 动态获取当前页码 (通过 URL 判断，兼容 PJAX 跳转)
+    // 默认第 1 页
+    var currentPage = 1; 
+    // 尝试从 URL 中匹配 /page/2/ 这种结构
+    var match = window.location.pathname.match(/\/page\/(\d+)/);
+    if (match) {
+      currentPage = parseInt(match[1]);
+    }
+    
+    console.log('[Arknights] Current Page:', currentPage, 'Total:', TOTAL_POSTS);
+
+    // 获取所有文章卡片
+    var postBlocks = document.querySelectorAll('.post-block');
+    
+    if (postBlocks.length === 0) {
+      console.log('[Arknights] No post blocks found.');
+      return;
+    }
+
+    // 循环注入
+    postBlocks.forEach(function(block, index) {
+      // 算法：总数 - ((当前页-1) * 每页数) - 当前索引
+      var logNum = TOTAL_POSTS - ((currentPage - 1) * PER_PAGE) - index;
+
+      // 修正：防止负数
+      if (logNum < 1) logNum = 1;
+
+      // 格式化：补零
+      var formattedNum = logNum < 10 ? '0' + logNum : logNum;
+      
+      // 写入属性
+      block.setAttribute('data-ak-log', 'RECORD // ' + formattedNum);
+    });
+    
+    console.log('[Arknights] Injection done. Processed ' + postBlocks.length + ' posts.');
+  }
+
+  // 3. 执行逻辑
+  // 3.1 页面初次加载时执行
+  document.addEventListener('DOMContentLoaded', updateArknightsLogs);
+  
+  // 3.2 兼容 NexT 的 PJAX 跳转 (非常重要！)
+  // 监听 pjax:success 事件，确保翻页后重新计算
+  document.addEventListener('pjax:success', updateArknightsLogs);
+
+  // 3.3 保底策略：如果 DOMContentLoaded 错过了，立即执行一次
+  // (有时 script 放在 body 底部时 DOM 已经 ready 了)
+  updateArknightsLogs();
+  
+})();
+</script>

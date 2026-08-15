@@ -1,0 +1,6 @@
+# Restored NexT theme customization (was lost when themes/next folder disappeared)
+# Re-injects the site's custom Arknights theme + watermark + giscus comments
+custom_file_path:
+  style: source/_data/styles.styl
+  bodyEnd: source/_data/body-end.njk
+  postBodyEnd: source/_data/post-body-end.njk

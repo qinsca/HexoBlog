@@ -1,0 +1,278 @@
+/* =========================================================
+   ARKNIGHTS UI THEME OVERRIDE FOR NEXT
+   ========================================================= */
+
+/* ------------------ 0. 字体引入 ------------------ */
+@import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700&family=Oxanium:wght@400;600;700;800&display=swap');
+
+
+/* =========================================================
+   ARKNIGHTS THEME V9.0 (User Custom + Layer Enhancement)
+   ========================================================= */
+
+/* ------------------ 0. 核心变量 (层次感调色盘) ------------------ */
+
+/* ====== ☀️ 白天模式 ====== */
+:root {
+  --ak-bg: #F2F2F2;               /* L1: 最底层背景 (稍深灰) */
+  --ak-sidebar-bg: #FCFCFC;       /* L2: 侧边栏 (几乎白) */
+  --ak-card-bg: #FFFFFF;          /* L3: 文章卡片 (纯白) */
+  
+  --ak-text-main: #222222;
+  --ak-text-sec: #555555;
+  --ak-border-color: #E0E0E0;
+  --ak-decorat: #FFCD42;  
+  --ak-blue: #23ADE5;             /* 阿米娅青 */
+  --ak-blue-hover: #1E90BF;
+  --ak-yellow: #FFCD42;           /* 警告黄 */
+  
+  --ak-shadow: 0 4px 15px rgba(0,0,0,0.08); /* 白天柔和投影 */
+  --ak-border-width: 6px;
+}
+
+/* ====== 🌙 夜间模式 (重点修复层次感) ====== */
+/* 1. 系统设置 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ak-bg: #0A0A0A;             /* L1: 背景极深 (接近纯黑) */
+    --ak-sidebar-bg: #161616;     /* L2: 侧边栏 (深灰) */
+    --ak-card-bg: #202020;        /* L3: 文章卡片 (提亮灰，形成对比) */
+    --ak-decorat: #23ADE5;
+    --ak-text-main: #FFFFFF;
+    --ak-text-sec: #A0A0A0;
+    --ak-border-color: #333333;
+    --ak-shadow: 0 10px 30px rgba(0,0,0,0.8); /* 夜间强投影，拉开层次 */
+  }
+}
+
+/* 2. 手动开关 */
+body.dark-mode, body.darkmode--activated, html[data-theme='dark'] {
+  --ak-bg: #0A0A0A;
+  --ak-sidebar-bg: #161616;
+  --ak-card-bg: #202020;
+  --ak-decorat: #23ADE5;
+  --ak-text-main: #FFFFFF;
+  --ak-text-sec: #A0A0A0;
+  --ak-border-color: #333333;
+  --ak-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+/* ------------------ 1. 全局背景与计数器初始化 ------------------ */
+body {
+  background-color: var(--ak-bg) !important;
+  /* 增加纹理以区分纯色块 */
+  background-image: 
+    linear-gradient(var(--ak-border-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ak-border-color) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-attachment: fixed;
+  
+  color: var(--ak-text-sec);
+  font-family: 'Oxanium', 'Consolas', sans-serif;
+  transition: all 0.3s ease;
+  
+  /* 核心：初始化文章计数器 */
+  counter-reset: post-idx;
+}
+
+/* ------------------ 2. 侧边栏 (层次分离) ------------------ */
+/* 侧边栏背景独立颜色 */
+.sidebar-inner, .header-inner {
+  background: var(--ak-sidebar-bg) !important;
+  border: 1px solid var(--ak-border-color);
+  box-shadow: var(--ak-shadow) !important; /* 增加投影让它浮起来 */
+  border-radius: 0 !important;
+}
+
+/* [你的代码] 菱形头像 */
+.site-author-image {
+  border: 2px solid var(--ak-blue);
+  padding: 2px;
+  /* 菱形切割 */
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: rgba(0,0,0,0.5);
+  transition: all 0.3s;
+  border-radius: 0 !important; /* 覆盖默认圆角 */
+}
+
+/* [你的代码] 悬停发光 */
+.site-author-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--ak-blue);
+  border-color: #fff;
+}
+
+/* 侧边栏装饰标题 */
+.sidebar-inner::before {
+  content: "TERMINAL // SYSTEM";
+  display: block;
+  background: var(--ak-decorat); /* 统一用青色头 */
+  color: #fff;
+  padding: 5px 10px;
+  font-weight: 800;
+  font-family: 'Oxanium';
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+.menu-item a:hover{
+  border-left: 4px solid var(--ak-blue);
+  background: rgba(35, 173, 229, 0.1);
+  color: var(--ak-blue) !important;
+}
+
+/* ------------------ 3. 文章卡片 (整合你的切角代码) ------------------ */
+.post-block {
+  /* 计数器递增 */
+  
+  
+  background: var(--ak-card-bg) !important;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 30px;
+  
+  /* [你的代码] 形状切割：右上和左下 */
+  clip-path: polygon(
+    0 0, 
+    100% 0, 
+    100% calc(100% - 15px), 
+    calc(100% - 15px) 100%, 
+    0 100%
+  );
+  
+  /* V5风格左侧粗边框 */
+  border-left: var(--ak-border-width) solid var(--ak-blue) !important;
+  
+  /* 强阴影：这是区分背景的关键 */
+  box-shadow: var(--ak-shadow) !important;
+  border-right: 1px solid var(--ak-border-color); /* 辅助边框 */
+  border-top: 1px solid var(--ak-border-color);
+  
+  position: relative;
+  transition: all 0.3s;
+}
+
+/* 悬停效果 */
+.post-block:hover {
+  border-left-color: var(--ak-yellow) !important;
+  transform: translateX(5px);
+  /* 悬停时稍微提亮背景 */
+  background: linear-gradient(rgba(255,255,255,0.03), rgba(255,255,255,0.03)), var(--ak-card-bg) !important;
+}
+
+/* [你的代码] 标题上方的 LOG 编号 */
+/* [修改] 标题上方的 LOG 编号 */
+.post-block::before {
+  /* 核心修改：不再使用 counter，而是读取 data-ak-log 属性 */
+  content: attr(data-ak-log); 
+  
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-family: 'Oxanium', monospace;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--ak-blue);
+  letter-spacing: 1px;
+  opacity: 0.6;
+}
+
+/* 同时，为了防止 CSS 计数器干扰，我们可以把之前的计数器代码删掉或注释掉 */
+/* body { counter-reset: post-idx; }  <-- 这一行可以删掉 */
+/* .post-block { counter-increment: post-idx; } <-- 这一行也可以删掉 */
+
+/* ------------------ 4. 标题与文字 ------------------ */
+/* [你的代码] 标题样式增强 */
+.post-title {
+  text-align: left;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  padding-left: 15px;
+  /* 左侧竖线 */
+  border-left: 4px solid var(--ak-blue) !important; /* 使用黄色与卡片边框区分 */
+  border-bottom: none !important;
+}
+
+.post-title-link {
+  color: var(--ak-text-main) !important;
+}
+.post-title-link:hover {
+  color: var(--ak-blue) !important;
+}
+
+/* ------------------ 5. 归档与列表适配 ------------------ */
+.posts-collapse::before { background: transparent !important; }
+.posts-collapse .post-header {
+  border-bottom: 1px solid var(--ak-border-color);
+}
+.posts-collapse .post-header:hover {
+  background: var(--ak-blue);
+  padding-left: 20px;
+}
+.posts-collapse .post-header:hover * { color: #fff !important; }
+
+/* ------------------ 6. 代码块与按钮 ------------------ */
+.btn {
+  background: transparent;
+  border: 1px solid var(--ak-blue);
+  color: var(--ak-blue) !important;
+  font-family: 'Oxanium';
+  font-weight: bold;
+  border-radius: 0;
+}
+.btn:hover {
+  background: var(--ak-blue) !important;
+  color: #fff !important;
+}
+
+/* 代码块 */
+.highlight {
+  background: #F9F9F9;
+  border: 1px solid var(--ak-border-color);
+}
+@media (prefers-color-scheme: dark) {
+  .highlight { background: #000 !important; border-left: 4px solid var(--ak-yellow); }
+  .highlight figcaption { background: #111; color: #ccc; }
+}
+body.dark-mode .highlight, html[data-theme='dark'] .highlight {
+  background: #000 !important;
+  border-left: 4px solid var(--ak-yellow);
+}
+body.dark-mode .highlight figcaption, html[data-theme='dark'] .highlight figcaption {
+  background: #111; color: #ccc;
+}
+
+/* ------------------ 7. Giscus 评论区适配 ------------------ */
+.arknights-comments-container {
+  background: var(--ak-card-bg);
+  padding: 20px;
+  margin-top: 50px;
+  border: 1px solid var(--ak-border-color);
+  border-bottom: 4px solid var(--ak-yellow);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+.ak-comment-title { color: var(--ak-blue); }
+/* 修复 LOG 编号不显示的问题 */
+.post-block::before {
+  /* 优先读取 data-ak-log，如果没有读到，显示 Loading */
+  content: attr(data-ak-log);
+  
+  position: absolute;
+  top: 15px;      /* 调整位置，防止被切角遮挡 */
+  right: 20px;
+  
+  font-family: 'Oxanium', monospace;
+  font-size: 13px;
+  font-weight: 800;
+  
+  /* 强制使用青色，防止变量失效 */
+  color: #23ADE5; 
+  /* 兼容变量写法 */
+  color: var(--ak-blue, #23ADE5);
+  
+  letter-spacing: 1px;
+  opacity: 0.8;
+  z-index: 10;    /* 提高层级，防止被背景遮住 */
+  display: block; /* 确保显示 */
+  pointer-events: none; /* 防止遮挡点击 */
+}
