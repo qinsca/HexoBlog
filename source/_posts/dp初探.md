@@ -21,39 +21,41 @@ abbrlink: 6569320b
 * 𝑓(𝑖,1)=∑𝑓(𝑥,0)+𝑎𝑖（上司参加舞会时，下属都不会参加）
 我们可以通过 DFS，在返回上一层时更新当前结点的最优解。
 
-    #include<bits/stdc++.h>
-    using namespace std;
-    struct tree{
-        vector<int>son;
-    };
-    int dp[6005][2];
-    tree f[6005];
-    int happy[6005];
-    int v[6005];
-    void dfs(int x){
-        dp[x][0]=0;
-        dp[x][1]=happy[x];
-        for(auto s : f[x].son){
-            dfs(s);
-            dp[x][0]+=max(dp[s][0],dp[s][1]);
-            dp[x][1]+=dp[s][0];
-        }
-    };
-    int main(){
-        int n;
-        scanf("%d",&n);
-        for(int i=1;i<=n;i++)scanf("%d",&happy[i]);
-        for(int i=1;i<=n-1;i++){
-            int l,k;
-            scanf("%d %d",&l,&k);
-            f[k].son.push_back(l);
-            v[l]=1;
-        }
-        int root;
-        for(int i=1;i<=n;i++)if(v[i]==0)root=i;
-        dfs(root);
-        printf("%d\n",max(dp[root][0],dp[root][1]));
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+struct tree{
+    vector<int>son;
+};
+int dp[6005][2];
+tree f[6005];
+int happy[6005];
+int v[6005];
+void dfs(int x){
+    dp[x][0]=0;
+    dp[x][1]=happy[x];
+    for(auto s : f[x].son){
+        dfs(s);
+        dp[x][0]+=max(dp[s][0],dp[s][1]);
+        dp[x][1]+=dp[s][0];
     }
+};
+int main(){
+    int n;
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++)scanf("%d",&happy[i]);
+    for(int i=1;i<=n-1;i++){
+        int l,k;
+        scanf("%d %d",&l,&k);
+        f[k].son.push_back(l);
+        v[l]=1;
+    }
+    int root;
+    for(int i=1;i<=n;i++)if(v[i]==0)root=i;
+    dfs(root);
+    printf("%d\n",max(dp[root][0],dp[root][1]));
+}
+```
 
 # 不定根树形dp
 在树形dp的基础上，树以无向图的形式给出并且没有指定根节点，需要以每个点都充当一次根节点为前提进行统计

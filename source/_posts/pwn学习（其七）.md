@@ -6,7 +6,7 @@ tags:
 date: 2025-12-6
 categories:
   - CTF
-abbrlink: e04c41db
+abbrlink: f2f9ee35
 ---
 # heap初探 ​ ​   
 ## 核心概念 ​ ​   ​ 
@@ -45,6 +45,7 @@ abbrlink: e04c41db
     # 虽然 delete 了，但指针还在数组里，show(7) 可以打印被释放块的内容，就可以获取libc内部地址进而计算libc基址
     show(7)
     # 具体如何申请，释放和打印与具体题目有关
+
 * step 2 劫持__free_hook
 
     # 此时 0x90 的 Tcache 是满的，我们换个大小 (0x60) 进行攻击，比较干净
@@ -60,6 +61,7 @@ abbrlink: e04c41db
     add(10, 0x60)
     # 第二次申请，拿到的就是我们伪造的地址 (__free_hook)
     add(11, 0x60)
+    
 * step 3 获取shell
 
     # 此时 chunk 11 对应的内存就是 __free_hook

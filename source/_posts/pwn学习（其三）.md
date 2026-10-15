@@ -6,7 +6,7 @@ tags:
 date: 2025-11-9
 categories:
   - CTF
-abbrlink: d05aad03
+abbrlink: 9d440e51
 ---
 # ret2libic
 > 如果程序中没有system函数，在libc里找到system，使用输出libc其中的函数地址，从而计算基地址，来利用libc中的system("/bin/sh")
