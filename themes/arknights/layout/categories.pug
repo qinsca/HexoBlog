@@ -1,0 +1,50 @@
+extends includes/layout.pug
+
+//- 魔改新增：分类总览页（type: "categories" 的页面）
+//- 同 tags.pug：主题缺少 categories.pug，/categories/ 原先只会渲染出一个标题。
+
+block content
+  -
+    const categoriesList = list_categories({
+      order: 1
+      , show_count: false
+    })
+  -
+    const tagsList = list_tags({
+      order: -1
+      , show_count: theme.archives.tags_count
+    })
+  -
+    const archivesList = list_archives({
+      type: 'yearly'
+      , order: -1
+      , show_count: false
+    })
+
+  #archive-flex
+    include includes/archive-aside.pug
+    #Archives
+      //- 中文标题更直观（原来直接用 front-matter 里的 "categories"）
+      h1 #{__('menu.category.plural')}
+      #Archives-bg
+        if site.categories.length
+          p.ak-terms-hint #{__('menu.category.plural')} #{__('menu.total')}：#{site.categories.length}
+          #post-content
+            #ak-tag-cloud
+              //- site.categories 是 Warehouse Query，必须转成数组后才能 sort
+              each category in site.categories.toArray().sort((a, b) => b.length - a.length)
+                - const _catUrl = url_for(category.path)
+                - const _catName = category.name
+                .ak-term
+                  a.ak-term-title(href=_catUrl rel="category")= _catName
+                  if theme.archives.categories_count
+                    span.ak-term-count #{category.length}
+        else
+          p #{__('menu.empty')}
+
+block aside-block
+  h1 #{__('menu.navigation')}
+  #navigation
+    a(href=url_for('archives/')) #{__('menu.archive.plural')}
+    a(href=url_for('categories/')) #{__('menu.category.plural')}
+    a(href=url_for('tags/')) #{__('menu.tag.plural')}

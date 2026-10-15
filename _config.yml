@@ -53,7 +53,7 @@ highlight:
   auto_detect: false
   tab_replace: ''
   wrap: true
-  hljs: false
+  hljs: true # hexo-theme-arknights 要求：让 highlight.js 输出 .highlight 结构
 prismjs:
   preprocess: true
   line_number: true
@@ -100,7 +100,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next
+theme: arknights
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -116,13 +116,12 @@ cdn:
 
 cache:
   enable: true
-symbols_count_time:
-  symbols: true               # 文章字数统计                
-  total_symbols: true         # 站点总字数统计
-  exclude_codeblock: true     # 排除代码字数统计
-  awl: 2                      # 每个单词所占字符数，中文建议设置为2，英文建议设置为4
-excerpt:
-  depth: 3       # 解析3层HTML标签内的内容
-  excerpt_excludes: []
-  more_excludes: []
-  hideWholePostExcerpts: true
+
+# ---------------------------------------------------------------------------
+# 迁移到 hexo-theme-arknights 时移除的 NexT 专用插件（已从 package.json 卸载）：
+#   hexo-generator-searchdb        -> 主题自带 scripts/generator/search 生成 search.json
+#   hexo-excerpt                   -> 会把没有 <!-- more --> 的文章摘要清空
+#   hexo-next-darkmode             -> NexT 专用暗色开关，主题自带明暗切换
+#   hexo-generator-index-pin-top   -> NexT 专用置顶，主题自带 front-matter: sticky
+# 移除后首页摘要与全文一致；若想只显示开头，在文章里插入 <!-- more --> 即可。
+# ---------------------------------------------------------------------------

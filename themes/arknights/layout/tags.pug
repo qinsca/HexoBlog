@@ -1,0 +1,52 @@
+extends includes/layout.pug
+
+//- 魔改新增：标签总览页（type: "tags" 的页面）
+//- 主题原本只有 tag.pug（单个标签的文章列表），没有 tags.pug，
+//- 于是 /tags/ 会落到默认 page.pug —— 而页面正文是空的，渲染出来只剩一个标题。
+//- 这里复用 archive 页的结构（#archive-flex + 侧边导航 + #Archives 主卡片）。
+
+block content
+  -
+    const categoriesList = list_categories({
+      order: 1
+      , show_count: theme.archives.categories_count
+    })
+  -
+    const tagsList = list_tags({
+      order: -1
+      , show_count: false
+    })
+  -
+    const archivesList = list_archives({
+      type: 'yearly'
+      , order: -1
+      , show_count: false
+    })
+
+  #archive-flex
+    include includes/archive-aside.pug
+    #Archives
+      //- 中文标题更直观（原来直接用 front-matter 里的 "tags"）
+      h1 #{__('menu.tag.plural')}
+      #Archives-bg
+        if site.tags.length
+          p.ak-terms-hint #{__('menu.tag.plural')} #{__('menu.total')}：#{site.tags.length}
+          #post-content
+            #ak-tag-cloud
+              //- site.tags 是 Warehouse Query，必须转成数组后才能 sort
+              each tag in site.tags.toArray().sort((a, b) => b.length - a.length)
+                - const _tagUrl = url_for(tag.path)
+                - const _tagName = tag.name
+                .ak-term
+                  a.ak-term-title(href=_tagUrl rel="tag")= _tagName
+                  if theme.archives.tags_count
+                    span.ak-term-count #{tag.length}
+        else
+          p #{__('menu.empty')}
+
+block aside-block
+  h1 #{__('menu.navigation')}
+  #navigation
+    a(href=url_for('archives/')) #{__('menu.archive.plural')}
+    a(href=url_for('categories/')) #{__('menu.category.plural')}
+    a(href=url_for('tags/')) #{__('menu.tag.plural')}

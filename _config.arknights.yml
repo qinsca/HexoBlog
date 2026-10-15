@@ -1,0 +1,176 @@
+# ============================================================
+# hexo-theme-arknights 站点配置
+# 主题仓库：https://github.com/Yue-plus/hexo-theme-arknights
+# 本文件由 NexT 主题迁移而来，站点内容（文章/标签/分类/图片）全部保留。
+# ============================================================
+
+# 标签页图标（由头像生成，见 source/images/）
+favicon:
+  type: "image/png"
+  href: "/images/qsc-favicon-32.png"
+
+# canvas 动态背景粒子
+canvas_dust: true
+
+# 默认颜色模式：dark / dark-only / light / light-only / auto
+# 这里用 auto：默认跟随系统，用户手动切换后写入 localStorage，刷新与跳页都保持。
+color: auto
+
+build_time: false # 是否显示构建时间
+
+# <body> 背景图片链接
+# 对应主题自带的本地图片（themes/arknights/source/img/），按图片实际明暗分配：
+#   light: bk.jpg  —— 浅色羊皮纸/战术地图（mean luma ≈ 195），配浅色面板
+#   dark:  bg.jpg  —— 深色剪影夜景（mean luma ≈ 31），配深色面板
+# 用本地文件而不是主题默认的 CDN 外链（ak.hypergryph.com），避免外链失效。
+background_image:
+  light: /img/bk.jpg # 亮色模式
+  dark: /img/bg.jpg # 暗色模式
+
+# 导航栏
+menu:
+  Home: ""
+  About: about/
+  Archives: archives/
+  Tags: tags/
+  Categories: categories/
+
+# 侧边栏
+aside:
+  in_left: false # 侧边栏在左 true / false
+  logo: /images/qsc-avatar.png # 【魔改】罗德岛图标 → 我的头像
+  logo_margin: 6px # 为 Logo 图片设置 CSS margin
+  logo_border_radius: 50% # 圆形头像
+  dr: /about/ # 侧边栏 Dr. 链接
+  icp: # ICP 备案号
+  copyright: # 版权声明
+    # CC BY-NC-SA 4.0: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh
+
+# 社交链接
+# 格式：链接 || 图标
+social:
+  GitHub: https://github.com/qinsca || fab fa-github
+  E-Mail: mailto:1744326850@qq.com || fa fa-envelope
+
+# post 文章页面配置；true / false
+post:
+  date: true # 是否显示发布日期
+  updated: true # 是否显示修改日期
+  excerpt: true # 是否在文章中显示摘要内容（<!-- more--> 以上的内容）
+  reward:
+  count: true # 是否显示字数统计（依赖 hexo-wordcount）
+  time: true # 是否显示预计阅读时长（依赖 hexo-wordcount）
+  code_fold: 20 # 当代码小于等于此行数时默认展开，设为 -1 则全部展开
+
+# 文章内目录
+toc:
+  list_number: true # true / false ；是否显示编号
+  max_depth: 6 # 最大目录深度
+  min_depth: 1 # 最小目录深度
+
+# 归档页
+archives:
+  categories_count: true # 是否显示分类总数
+  tags_count: true # 是否显示标签总数
+
+# 搜索
+search:
+  enable: true
+  content: true # 若为 false，仅可搜索标题及 metadata
+  preload: false # 自动加载搜索数据
+  field: post
+  format: striptags
+
+# 背景音乐（无音频资源，关闭）
+bgm:
+  enable: false
+  autoplay: false
+  loop: true
+  src: /audio/bgm.mp3
+
+# Vercount 浏览量统计
+vercount:
+  enable: true
+  sitePV: true # 站点总访问量
+  siteUV: true # 站点访客数
+  pagePV: true # 页面访问量
+
+# Valine
+valine:
+  enable: false
+  app_id:
+  app_key:
+  server_url:
+  avatar: 'retro'
+  avatar_cdn: 'https://dn-qiniu-avatar.qbox.me/avatar/'
+
+# gitalk
+gitalk:
+  enable: false
+  client_id:
+  client_secret:
+  repo:
+  owner:
+  admin: []
+  id: location.pathname
+
+# Waline
+waline:
+  enable: false
+  server_url:
+  locale:
+    placeholder: "期待您的评论~"
+
+# Artalk
+artalk:
+  enable: false
+  server: https://artalk.server.instance/
+  site_name: qsc
+
+# Utterances
+utterances:
+  enable: false
+  repo:
+  issue_term: pathname
+  theme: preferred-color-scheme
+
+# Giscus（沿用 NexT 时期已有的配置，并适配明暗主题自动切换）
+giscus:
+  enable: true
+  repo: qinsca/qinsca.github.io
+  repo_id: R_kgDOQKri3w
+  category: Announcements
+  category_id: DIC_kwDOQKri384CzWLD
+  mapping: pathname
+  strict: 0
+  reactions_enabled: 1
+  emit_metadata: 0
+  input_position: bottom
+  # 方式二：分别设置明暗主题，随站点主题自动切换
+  theme_light: light
+  theme_dark: transparent_dark
+  lang: zh-CN
+  loading: lazy
+  crossorigin: anonymous
+
+# 图表支持
+mermaid:
+  enable: true
+  version: "11.12.2"
+
+# pjax 支持
+pjax:
+  enable: true
+
+# 公式前端渲染
+mathjax:
+  enable: false
+  version: "2.6.1"
+
+# 在 `<head>` 标签内引入 CSS 样式表
+stylesheets:
+  - /css/ak-custom.css
+
+# 在 `<body>` 尾部引入 JavaScript 脚本
+scripts:
+  - /js/ak-custom.js
