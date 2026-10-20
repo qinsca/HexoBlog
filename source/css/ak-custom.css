@@ -472,8 +472,13 @@ html.ak-theme-changing * {
    指针进入评论区时隐藏原生光标，在指针位置画同款像素光标。
    覆盖层是 pointer-events: none，不会挡住 iframe 的点击与滚动。 */
 
-#giscus iframe,
-#utterances iframe,
+/* 隐藏原生光标的范围要与 JS 的判定范围一致（整个评论区，而不只是 iframe），
+   否则容器边缘那几像素会出现"原生箭头 ↔ 像素光标"来回跳。
+   #giscus 内的元素都用通配符，覆盖 giscus 自己注入的包裹 <div>。 */
+#giscus,
+#giscus *,
+#utterances,
+#utterances *,
 .giscus-frame,
 .utterances-frame {
   cursor: none !important;
