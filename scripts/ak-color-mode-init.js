@@ -54,7 +54,12 @@ const FIX = `<script id="ak-color-mode-init">
  */
 const CURSOR = `<script id="ak-comment-cursor">
 (function () {
-  var ZONE = '#comments, #giscus, #utterances, .giscus-frame';
+  /* 判定区：既包含容器，也包含 giscus 注入的 iframe 本身。
+     只依赖容器尺寸是不够的 —— iframe 由 giscus 异步注入，容器可能先于它
+     有尺寸，或者比它小，导致边缘几像素判不进。 */
+  var ZONE = '#comments, #giscus, #utterances, ' +
+    '#comments iframe, #giscus iframe, #utterances iframe, ' +
+    '.giscus-frame, .utterances-frame';
   var DEBUG = /akcursor-debug/.test(window.location.hash || '');
   var layer = null;
   var shown = false;
@@ -82,29 +87,38 @@ const CURSOR = `<script id="ak-comment-cursor">
     return document.querySelectorAll('#comments, #giscus, #utterances');
   }
 
+  function place(el, x, y) {
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+  }
+
   function show(on, x, y) {
-    if (on === shown) return;
-    shown = on;
     var el = ensureLayer();
     var cs = containers();
     var i;
+
     if (on) {
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-      el.classList.add('on');
-      for (i = 0; i < cs.length; i++) cs[i].classList.add('ak-cursor-hidden');
+      // 定位先于显示，避免首帧出现在旧坐标
+      place(el, x, y);
+      if (!shown) {
+        shown = true;
+        el.classList.add('on');
+        for (i = 0; i < cs.length; i++) cs[i].classList.add('ak-cursor-hidden');
+      }
     } else {
-      el.classList.remove('on');
-      for (i = 0; i < cs.length; i++) cs[i].classList.remove('ak-cursor-hidden');
+      if (shown) {
+        shown = false;
+        el.classList.remove('on');
+        for (i = 0; i < cs.length; i++) cs[i].classList.remove('ak-cursor-hidden');
+      }
     }
   }
 
   function track(ev) {
     if (ev.pointerType && ev.pointerType !== 'mouse') return show(false, 0, 0);
-    var x = ev.clientX, y = ev.clientY;
+    var x = ev.clientX;
+    var y = ev.clientY;
     var hit = inZone(x, y);
-    var el = ensureLayer();
-    if (hit) { el.style.left = x + 'px'; el.style.top = y + 'px'; }
     show(hit, x, y);
   }
 
@@ -112,15 +126,18 @@ const CURSOR = `<script id="ak-comment-cursor">
   document.addEventListener('mousemove', track, { passive: true });
   document.addEventListener('pointerleave', function () { show(false, 0, 0); }, { passive: true });
   window.addEventListener('blur', function () { show(false, 0, 0); });
-  document.addEventListener('scroll', function () { show(false, 0, 0); }, { passive: true, capture: true });
   document.addEventListener('pjax:success', function () { show(false, 0, 0); });
 
+  /* 注意：这里【不能】监听 scroll。
+     鼠标在 giscus iframe 内部滚动时 scroll 会不断触发，把覆盖层反复关掉，
+     表现就是"边缘有框、进不去内部"。 */
+
   // 自检入口：控制台执行 akCursorDiag()
-  window.akCursorDiag = function () {
+  window.akCursorDiag = function (x, y) {
     var el = document.getElementById('ak-iframe-cursor');
     var cs = el ? window.getComputedStyle(el) : {};
     var out = {
-      jsVersion: 'inline-cursor/1',
+      jsVersion: 'inline-cursor/2',
       debugHash: DEBUG,
       layerExists: !!el,
       layerClass: el ? el.className : null,
@@ -143,11 +160,16 @@ const CURSOR = `<script id="ak-comment-cursor">
       var r = nodes[i].getBoundingClientRect();
       out.containers.push({
         sel: nodes[i].id || nodes[i].className || nodes[i].tagName,
+        x: Math.round(r.left),
+        y: Math.round(r.top),
         w: Math.round(r.width),
         h: Math.round(r.height),
-        top: Math.round(r.top),
         hidden: nodes[i].classList.contains('ak-cursor-hidden')
       });
+    }
+    // akCursorDiag(x, y) 可指定坐标做命中测试，方便不开鼠标也验证判定
+    if (typeof x === 'number' && typeof y === 'number') {
+      out.testPoint = { x: x, y: y, inZone: inZone(x, y) };
     }
     if (window.console) console.log('[akCursorDiag]', out);
     return out;
