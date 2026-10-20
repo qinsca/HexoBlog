@@ -169,10 +169,8 @@ mathjax:
 
 # 在 `<head>` 标签内引入 CSS 样式表
 stylesheets:
-  - /css/ak-custom.css?v=4
+  - /css/ak-custom.css
 
 # 在 `<body>` 尾部引入 JavaScript 脚本
-# 说明：评论区光标的核心逻辑已改为由 scripts/ak-color-mode-init.js 内联注入，
-# 不依赖这个外部文件是否加载成功。
 scripts:
   - /js/ak-custom.js
