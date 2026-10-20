@@ -168,11 +168,11 @@ mathjax:
   version: "2.6.1"
 
 # 在 `<head>` 标签内引入 CSS 样式表
-# 带 ?v= 查询串：GitHub Pages 对静态资源的默认缓存约 10 分钟，
-# 改完样式后浏览器很容易还拿旧文件，加版本号可以强制取新的。
 stylesheets:
   - /css/ak-custom.css?v=4
 
 # 在 `<body>` 尾部引入 JavaScript 脚本
+# 说明：评论区光标的核心逻辑已改为由 scripts/ak-color-mode-init.js 内联注入，
+# 不依赖这个外部文件是否加载成功。
 scripts:
-  - /js/ak-custom.js?v=4
+  - /js/ak-custom.js
